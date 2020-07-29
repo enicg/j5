@@ -1,0 +1,61 @@
+let n = 10000;
+
+let m=[];
+let x=[];
+let y=[];
+let vx=[];
+let vy=[];
+
+
+
+function setup() {
+	createCanvas(700,500);
+	fill(0, 32);
+  reset();
+}
+
+function draw() {
+	noStroke();
+	rect(0, 0, width, height);
+
+	for (let i = 0; i < n; i++) {
+		dx = mouseX - x[i];
+		dy = mouseY - y[i];
+
+		d = sqrt(dx*dx + dy*dy);
+		if (d < 1) d = 1;
+
+		f = sin(d * 0.04) * m[i] / d;
+
+		vx[i] = vx[i] * 0.5 + f * dx;
+		vy[i] = vy[i] * 0.5 + f * dy;
+	}
+
+	for (let i = 0; i < n; i++) {
+		x[i] += vx[i];
+		y[i] += vy[i];
+
+		if (x[i] < 0) x[i] = width;
+		else if (x[i] > width) x[i] = 0;
+
+		if (y[i] < 0) y[i] = height;
+		else if (y[i] > height) y[i] = 0;
+
+		if (m[i] < 0) stroke(128, 128, 255);
+		else stroke(0, 255, 255);
+
+		point(x[i], y[i]);
+	}
+}
+
+function reset() {
+	for (let i = 0; i < n; i++) {
+		m[i] = randomGaussian() * 16;
+		x[i] = random(width);
+		y[i] = random(height);
+	}
+}
+
+function mousePressed() {
+	reset();
+}
